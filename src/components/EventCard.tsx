@@ -36,9 +36,57 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
   return (
     <motion.div
-      whileHover={{ y: -5 }}
-      className="group bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-xl hover:shadow-2xl transition-all duration-300"
+      whileHover={{ 
+        y: -10,
+        rotateY: 5,
+        rotateX: 5,
+        scale: 1.02
+      }}
+      className="group bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+      style={{ transformStyle: 'preserve-3d' }}
     >
+      {/* Animated background gradient */}
+      <motion.div
+        className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
+        style={{
+          background: 'linear-gradient(45deg, #6C63FF, #00C9A7, #FF6B6B, #FFD93D)',
+          backgroundSize: '400% 400%'
+        }}
+        animate={{
+          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: 'easeInOut'
+        }}
+      />
+      
+      {/* Floating particles on hover */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-indigo-400 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -50],
+              opacity: [0, 1, 0],
+              scale: [0, 1.5, 0]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+              ease: 'easeOut'
+            }}
+          />
+        ))}
+      </div>
+
       <div className="flex items-start justify-between mb-4">
         <div className="flex space-x-2">
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[event.status]}`}>
@@ -56,9 +104,15 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
         )}
       </div>
 
-      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+      <motion.h3 
+        className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors relative z-10"
+        whileHover={{
+          scale: 1.05,
+          textShadow: '0 0 10px rgba(108, 99, 255, 0.8)'
+        }}
+      >
         {event.title}
-      </h3>
+      </motion.h3>
       <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
         {event.description}
       </p>
@@ -86,11 +140,26 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
       <Link to={`/events/${event.id}`}>
         <motion.button
-          whileHover={{ x: 5 }}
-          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold flex items-center justify-center space-x-2 hover:shadow-lg transition-all duration-200"
+          whileHover={{ 
+            x: 5,
+            scale: 1.02,
+            boxShadow: '0 10px 30px rgba(108, 99, 255, 0.4)'
+          }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-semibold flex items-center justify-center space-x-2 hover:shadow-lg transition-all duration-200 relative overflow-hidden"
         >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0"
+            whileHover={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          />
           <span>View Details</span>
-          <ArrowRight className="h-4 w-4" />
+          <motion.div
+            whileHover={{ x: 3 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ArrowRight className="h-4 w-4" />
+          </motion.div>
         </motion.button>
       </Link>
     </motion.div>

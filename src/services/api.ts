@@ -2,11 +2,11 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
 class ApiService {
   private baseURL: string;
-  private token: string | null;
+  private sessionId: string | null;
 
   constructor() {
     this.baseURL = API_BASE_URL;
-    this.token = localStorage.getItem('token');
+    this.sessionId = localStorage.getItem('sessionId');
   }
 
   private async request(endpoint: string, options: RequestInit = {}) {
@@ -15,7 +15,7 @@ class ApiService {
     const config: RequestInit = {
       headers: {
         'Content-Type': 'application/json',
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
+        ...(this.sessionId && { 'X-Session-ID': this.sessionId }),
         ...options.headers,
       },
       ...options,
@@ -43,9 +43,9 @@ class ApiService {
       body: JSON.stringify({ email, password }),
     });
     
-    if (data.token) {
-      this.token = data.token;
-      localStorage.setItem('token', data.token);
+    if (data.sessionId) {
+      this.sessionId = data.sessionId;
+      localStorage.setItem('sessionId', data.sessionId);
     }
     
     return data;
@@ -57,9 +57,9 @@ class ApiService {
       body: JSON.stringify({ name, email, password }),
     });
     
-    if (data.token) {
-      this.token = data.token;
-      localStorage.setItem('token', data.token);
+    if (data.sessionId) {
+      this.sessionId = data.sessionId;
+      localStorage.setItem('sessionId', data.sessionId);
     }
     
     return data;
@@ -70,8 +70,8 @@ class ApiService {
   }
 
   logout() {
-    this.token = null;
-    localStorage.removeItem('token');
+    this.sessionId = null;
+    localStorage.removeItem('sessionId');
   }
 
   // Events methods

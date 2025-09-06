@@ -6,6 +6,11 @@ import HeroAnimation from '../components/HeroAnimation';
 import EventCard from '../components/EventCard';
 import CommunitySpotlight from '../components/CommunitySpotlight';
 import AnimatedCounter from '../components/AnimatedCounter';
+import ParticleBackground from '../components/ParticleBackground';
+import FloatingElements from '../components/FloatingElements';
+import MorphingBackground from '../components/MorphingBackground';
+import AnimatedText from '../components/AnimatedText';
+import HolographicCard from '../components/HolographicCard';
 
 const HomePage = () => {
   const upcomingEvents = [
@@ -72,7 +77,11 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="pt-16">
+    <div className="pt-16 relative overflow-hidden">
+      <ParticleBackground />
+      <MorphingBackground />
+      <FloatingElements />
+      
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-teal-500 overflow-hidden">
         {/* Background Elements */}
@@ -97,11 +106,11 @@ const HomePage = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight"
               >
-                Code.
+                <AnimatedText text="Code." variant="glow" className="block" />
                 <br />
-                <span className="text-yellow-300">Compete.</span>
+                <AnimatedText text="Compete." variant="bounce" className="text-yellow-300 block" delay={0.5} />
                 <br />
-                <span className="text-teal-300">Conquer.</span>
+                <AnimatedText text="Conquer." variant="wave" className="text-teal-300 block" delay={1} />
               </motion.h1>
               
               <motion.p
@@ -228,23 +237,36 @@ const HomePage = () => {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <motion.div
+                <HolographicCard
                   key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 text-center hover:shadow-xl transition-all duration-300 group"
+                  className="h-full"
+                  intensity={0.8}
                 >
-                  <div className={`bg-gradient-to-r ${feature.color} rounded-2xl p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300">
-                    {feature.description}
-                  </p>
-                </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-xl rounded-2xl p-6 border border-white/20 dark:border-slate-700/50 text-center h-full group"
+                  >
+                    <motion.div 
+                      className={`bg-gradient-to-r ${feature.color} rounded-2xl p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center`}
+                      whileHover={{ 
+                        scale: 1.2,
+                        rotate: 360,
+                        boxShadow: '0 0 30px rgba(108, 99, 255, 0.6)'
+                      }}
+                      transition={{ duration: 0.8 }}
+                    >
+                      <Icon className="h-8 w-8 text-white" />
+                    </motion.div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                      <AnimatedText text={feature.title} variant="glow" delay={index * 0.2} />
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      {feature.description}
+                    </p>
+                  </motion.div>
+                </HolographicCard>
               );
             })}
           </div>
@@ -270,14 +292,19 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {upcomingEvents.map((event, index) => (
-              <motion.div
+              <HolographicCard
                 key={event.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="h-full"
+                intensity={0.6}
               >
-                <EventCard event={event} />
-              </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <EventCard event={event} />
+                </motion.div>
+              </HolographicCard>
             ))}
           </div>
 
